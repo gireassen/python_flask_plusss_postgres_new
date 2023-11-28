@@ -1,0 +1,24 @@
+{% extends 'base.html' %} 
+<!-- деректива extends включает всю разметку base.html-->
+{% block body %}
+
+<h2>{{ the_title }}</h2>
+
+<p>Result:</p>
+<table>
+    <tr>
+        <td>
+            QUERY: 
+        </td>
+        <td>
+            {{ query }}
+        </td>
+    </tr>
+</table>
+
+
+<p>
+    Res is:{{ the_results}}
+</p>
+
+{% endblock %}

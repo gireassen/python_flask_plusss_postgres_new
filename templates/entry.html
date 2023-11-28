@@ -1,0 +1,77 @@
+{% extends 'base.html' %} 
+<!-- деректива extends включает всю разметку base.html-->
+{% block body %}
+
+<h2>{{ the_title }}</h2>
+<script>
+    function parseInput(input) {
+        const lines = input.split('\n');
+        let output = '';
+
+        for (line of lines) {
+            line = line.trim();
+
+            if (!line) {
+                continue;
+            }
+
+            const parts = line.split(' ');
+
+            if (parts.length && parts.length === 4) {
+                const filenameIdAuthor = parts[0].split('::');
+                const filename = filenameIdAuthor[0];
+                const id = filenameIdAuthor[1];
+                const author = filenameIdAuthor[2];
+                const md5sum = parts[3];
+
+                output += `update databasechangelog set md5sum='${md5sum}' where filename='${filename}' and author='${author}' and id='${id}';\n`;
+            } else {
+                alert("Ошибка в строке " + line);
+            }
+        }
+
+        return output;
+    }
+
+    function submit() {
+        const input = document.getElementById('input').value;
+        const outputElem = document.getElementById('output');
+
+        outputElem.value = parseInput(input);
+    }
+
+</script>
+<body>
+    <table>
+        <tr>
+            <h4 name = "one_head"> Скопируйте ошибки из Jenkins в этот блок: </h4> 
+        </tr>
+    </table>
+    <div class="fix-wrapper">
+        <div class="fix-item">
+            <label for="input"></label><textarea id="input" ></textarea>
+        </div>
+        <div class="fix-divider">
+            <button id="submit" onclick="submit()">
+                Преобразовать -->
+            </button>
+        </div>
+    </div>
+</body>
+<form method="POST" action="/query_result">
+    <table>
+        <p>Запросы для UPDATE, заполните остальные данные</p>
+        <div class="fix-item">
+            <label for="output"></label><textarea  name="query" id="output" readonly></textarea>
+        </div>
+        <tr><td>[database]:</td><td><input name="database" type="text" width="60" value="qwe"></td></tr>
+        <tr><td>[user]:</td><td><input name="user" type="text" width="60" value="qwe"></td></tr>
+        <tr><td>[password]:</td><td><input name="password" type="text" width="60" value="qwe"></td></tr>
+        <tr><td>[host]:</td><td><input name="host" type="text" width="60" value="None"></td></tr>
+        <tr><td>[port]:</td><td><input name="port" type="text" width="60" value="5432"></td></tr>
+    </table>
+<p>Если всё верно, нажмите SUBMIT</p>
+<p><input value="SUBMIT" type="SUBMIT"</p>
+</form>
+
+{% endblock %}
